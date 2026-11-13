@@ -186,6 +186,94 @@ wts 完整构建仍依赖 [tensorrtx](https://github.com/wang-xinyu/tensorrtx) �
 
 ---
 
+## 用 `trtexec` 从 ONNX 建引擎
+
+假设 `trtexec` 在 PATH 中（TensorRT 10 的 `bin/trtexec`），权重已放到各目录 `weights/`。下面「推荐引擎」指本仓实测默认；能出 engine 不等于精度合格。
+
+| 模型 / ONNX | 纯 `trtexec`？ | 说明 |
+| --- | --- | --- |
+| SuperPoint `superpoint_v1_sim_int32_trt10.onnx` | **可以** | FP16 + 动态分辨率即可 |
+| SuperGlue `superglue_*_sim_int32_trt10.onnx` | **不行（推荐路径）** | 必须把 Sinkhorn 里的 Exp / Log / ReduceSum 钉在 FP32；裸 `--fp16` 会 NaN、匹配为 0。用本仓 C++ 建引擎 |
+| ALIKED `aliked_n16_k1024.onnx` | **可以** | FP16 即可 |
+| LightGlue `aliked_lightglue_dyn.onnx` | **不推荐** | 动态点数可用 `trtexec` 设 shape；但同样需要 Exp/Log/ReduceSum 留 FP32，应用本仓 C++ |
+| MixVPR `mixvpr_resnet50_4096.onnx` | **可以（粗糙）** | 裸 FP16 能建；推荐仍用本仓把 L2 的 ReduceSum 留 FP32（召回上差别很小） |
+| YOLO `yolov8n.onnx` FP16 | **可以** | 推荐部署路径 |
+| YOLO INT8 | **不行（仅 trtexec）** | 需要标定缓存 / EntropyCalibrator，用本仓 `onnx_int8` 管线 |
+| YOLO `.wts` | **无 ONNX** | 走 [tensorrtx](https://github.com/wang-xinyu/tensorrtx) 插件工程，不是 `trtexec --onnx` |
+
+### SuperPoint（可以）
+
+```bash
+trtexec --onnx=weights/superpoint_v1_sim_int32_trt10.onnx \
+  --saveEngine=weights/superpoint_v1_sim_int32.engine \
+  --fp16 \
+  --memPoolSize=workspace:4096M \
+  --minShapes=input:1x1x100x100 \
+  --optShapes=input:1x1x240x320 \
+  --maxShapes=input:1x1x1500x1500
+```
+
+### SuperGlue（推荐：不要用裸 `trtexec --fp16`）
+
+```bash
+# 仅作反例：能生成 engine，但匹配会坏
+# trtexec --onnx=weights/superglue_indoor_sim_int32_trt10.onnx --saveEngine=/tmp/bad.engine --fp16 \
+#   --minShapes=keypoints_0:1x1x2,scores_0:1x1,descriptors_0:1x256x1,keypoints_1:1x1x2,scores_1:1x1,descriptors_1:1x256x1 \
+#   --optShapes=keypoints_0:1x512x2,scores_0:1x512,descriptors_0:1x256x512,keypoints_1:1x512x2,scores_1:1x512,descriptors_1:1x256x512 \
+#   --maxShapes=keypoints_0:1x1024x2,scores_0:1x1024,descriptors_0:1x256x1024,keypoints_1:1x1024x2,scores_1:1x1024,descriptors_1:1x256x1024
+
+# 正确：编译本仓后，首次推理会按 C++ 逻辑建出混合精度引擎
+# （或直接用 HF 上的 superglue_indoor_fp16_stable.engine）
+```
+
+### ALIKED 提取器（可以）
+
+```bash
+trtexec --onnx=weights/aliked_n16_k1024.onnx \
+  --saveEngine=weights/aliked_n16_k1024_fp16.engine \
+  --fp16 \
+  --memPoolSize=workspace:8192M
+```
+
+### LightGlue 动态点数（不推荐只用 `trtexec`）
+
+```bash
+# 能建图，但缺 Exp/Log/ReduceSum 的 FP32 约束；精度请用本仓 C++ 或 HF 的 *_k1024_fp16.engine
+trtexec --onnx=weights/aliked_lightglue_dyn.onnx \
+  --saveEngine=/tmp/aliked_lightglue_dyn_k1024_trtexec.engine \
+  --fp16 \
+  --memPoolSize=workspace:8192M \
+  --minShapes=kpts0:1x1x2,desc0:1x1x128,kpts1:1x1x2,desc1:1x1x128 \
+  --optShapes=kpts0:1x1024x2,desc0:1x1024x128,kpts1:1x1024x2,desc1:1x1024x128 \
+  --maxShapes=kpts0:1x1024x2,desc0:1x1024x128,kpts1:1x1024x2,desc1:1x1024x128
+```
+
+### MixVPR（可以；推荐仍用本仓）
+
+```bash
+trtexec --onnx=weights/mixvpr_resnet50_4096.onnx \
+  --saveEngine=weights/mixvpr_resnet50_4096_fp16_trtexec.engine \
+  --fp16 \
+  --memPoolSize=workspace:4096M
+# 与推荐引擎的差异：本仓会额外把 L2 归一化里的 ReduceSum 留在 FP32
+```
+
+### YOLO ONNX FP16（可以）
+
+```bash
+trtexec --onnx=weights/yolov8n.onnx \
+  --saveEngine=weights/yolov8n_fp16.engine \
+  --fp16 \
+  --memPoolSize=workspace:4096M
+```
+
+### YOLO INT8 / wts（不行 / 无此 ONNX）
+
+```bash
+# INT8：不要指望一条 trtexec 无标定就等价本仓结果；用 yolo/ config/onnx_int8.yaml + 本仓构建
+# wts：没有对应部署 ONNX，需 tensorrtx YOLOv8 插件工程生成 engine
+```
+
 ## 下载权重
 
 ```bash
@@ -198,7 +286,7 @@ huggingface-cli download hhl134/tensorrt-small-models-weights --local-dir /tmp/t
 
 ## 构建提示
 
-各子目录均为独立 CMake 工程。需本机安装 TensorRT 10、CUDA、OpenCV，并在 CMake 中指向 TensorRT 路径。具体目标名见各目录 `CMakeLists.txt`。
+各子目录均为独立 CMake 工程。需本机安装 TensorRT 10、CUDA、OpenCV，并在 CMake 中指向 TensorRT 路径。具体目标名见各目录 `CMakeLists.txt`。需要混合精度层约束时（SuperGlue / LightGlue / MixVPR 推荐配置），以本仓 C++ 建引擎为准，不要只依赖上面的 `trtexec`。
 
 ## 许可
 
