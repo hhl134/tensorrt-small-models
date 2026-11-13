@@ -1,0 +1,4 @@
+desc=SacreCoeur户外宽基线
+config=config_640x480.yaml
+src0=/home/hhl/workspace/algorithm/Hierarchical-Localization/datasets/sacre_coeur/mapping/02928139_3448003521.jpg
+src1=/home/hhl/workspace/algorithm/Hierarchical-Localization/datasets/sacre_coeur/mapping/17295357_9106075285.jpg

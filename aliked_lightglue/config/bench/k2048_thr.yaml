@@ -1,0 +1,32 @@
+aliked:
+  image_width: 640
+  image_height: 480
+  max_keypoints: 2048
+  desc_dim: 128
+  detection_threshold: 0.2
+  input_tensor_names:
+    - "image"
+  output_tensor_names:
+    - "keypoints"
+    - "scores"
+    - "descriptors"
+    - "peaks"
+  onnx_file: "aliked_n16_k2048.onnx"
+  engine_file: "aliked_n16_k2048_fp16.engine"
+
+lightglue:
+  match_threshold: 0.1
+  min_keypoints: 1
+  opt_keypoints: 2048
+  max_keypoints: 2048
+  desc_dim: 128
+  fp16: true
+  input_tensor_names:
+    - "kpts0"
+    - "desc0"
+    - "kpts1"
+    - "desc1"
+  output_tensor_names:
+    - "scores"
+  onnx_file: "aliked_lightglue_dyn.onnx"
+  engine_file: "aliked_lightglue_dyn_k2048_fp16.engine"

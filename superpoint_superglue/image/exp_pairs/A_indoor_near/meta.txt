@@ -1,0 +1,4 @@
+desc=Freiburg室内相邻帧
+config=config_640x480.yaml
+src0=/home/hhl/workspace/deploy/tensorrt/SuperPoint-SuperGlue-TensorRT/image/freiburg_sequence/1341847980.722988.png
+src1=/home/hhl/workspace/deploy/tensorrt/SuperPoint-SuperGlue-TensorRT/image/freiburg_sequence/1341847981.726650.png

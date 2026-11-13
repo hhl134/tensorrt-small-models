@@ -1,0 +1,5 @@
+scenario	config	desc
+A_indoor_near_320	config_320x240.yaml	320
+A_indoor_near	config_640x480.yaml	640
+D_recon_near	config_640x1108.yaml	1108
+F_cbd_near	config_640x512.yaml	cbd

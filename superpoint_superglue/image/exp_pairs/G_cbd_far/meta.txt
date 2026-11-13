@@ -1,0 +1,4 @@
+desc=CBD外立面大视角
+config=config_640x512.yaml
+src0=/home/hhl/workspace/data/milo_CBD_Building_01/colmap/dense/images/00021.png
+src1=/home/hhl/workspace/data/milo_CBD_Building_01/colmap/dense/images/00121.png

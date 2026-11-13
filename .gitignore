@@ -1,0 +1,37 @@
+# build
+build/
+**/build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.o
+*.a
+*.so
+
+# weights / engines (hosted on Hugging Face)
+**/*.engine
+**/*.onnx
+**/*.pt
+**/*.pth
+**/*.wts
+**/*.ckpt
+**/*.bin
+**/weights/**
+!**/weights/README.md
+
+# runtime
+out/
+**/out/
+calib/
+**/calib/
+__pycache__/
+*.pyc
+.cache/
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp

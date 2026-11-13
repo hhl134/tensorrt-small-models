@@ -1,0 +1,7 @@
+scenario	config	desc
+A_indoor_near_320	config_320x240_spint8.yaml	320 int8
+A_indoor_near	config_640x480_spint8.yaml	640 int8
+B_indoor_step	config_640x480_spint8.yaml	step int8
+D_recon_near	config_640x1108_spint8.yaml	recon int8
+F_cbd_near	config_640x512_spint8.yaml	cbd int8
+H_sacre_outdoor	config_640x480_spint8.yaml	sacre int8

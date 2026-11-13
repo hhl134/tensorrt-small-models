@@ -1,0 +1,4 @@
+desc=校园场景
+config=config_640x480.yaml
+src0=/home/hhl/workspace/outputs/recon_test/qualitative/campus/dn_raw/test/rgb/0000.png
+src1=/home/hhl/workspace/outputs/recon_test/qualitative/campus/dn_raw/test/rgb/0040.png

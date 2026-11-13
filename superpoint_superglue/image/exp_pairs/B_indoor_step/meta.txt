@@ -1,0 +1,4 @@
+desc=Freiburg室内中等运动
+config=config_640x480.yaml
+src0=/home/hhl/workspace/deploy/tensorrt/SuperPoint-SuperGlue-TensorRT/image/freiburg_sequence/1341847985.746954.png
+src1=/home/hhl/workspace/deploy/tensorrt/SuperPoint-SuperGlue-TensorRT/image/freiburg_sequence/1341847988.769740.png

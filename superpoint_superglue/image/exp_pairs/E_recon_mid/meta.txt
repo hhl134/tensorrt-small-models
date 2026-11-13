@@ -1,0 +1,4 @@
+desc=自采走廊中等基线
+config=config_640x1108.yaml
+src0=/home/hhl/workspace/outputs/recon_test/gsplat_data/xgrid_cam0/images/K1/camera_0/1769607852.583022_0.jpg
+src1=/home/hhl/workspace/outputs/recon_test/gsplat_data/xgrid_cam0/images/K1/camera_0/1769607862.876611_0.jpg

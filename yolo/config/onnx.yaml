@@ -1,0 +1,13 @@
+yolo:
+  image_width: 640
+  image_height: 640
+  num_classes: 80
+  conf_threshold: 0.25
+  nms_threshold: 0.45
+  fp16: true
+  input_tensor_names:
+    - "images"
+  output_tensor_names:
+    - "output0"
+  onnx_file: "yolov8n.onnx"
+  engine_file: "yolov8n_fp16.engine"

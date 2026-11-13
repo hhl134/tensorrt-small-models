@@ -1,0 +1,6 @@
+scenario	config	desc
+A_indoor_near	config_640x480.yaml	室内对照 indoor权重
+F_cbd_near	config_640x512.yaml	CBD近邻 indoor
+G_cbd_far	config_640x512.yaml	CBD远 indoor
+H_sacre_outdoor	config_640x480.yaml	Sacre indoor
+I_campus	config_640x512.yaml	校园 indoor

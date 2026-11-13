@@ -1,0 +1,14 @@
+mixvpr:
+  image_width: 320
+  image_height: 320
+  desc_dim: 4096
+  fp16: true
+  force_norm_fp32: false
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  input_tensor_names:
+    - "image"
+  output_tensor_names:
+    - "descriptor"
+  onnx_file: "mixvpr_resnet50_4096.onnx"
+  engine_file: "mixvpr_resnet50_4096_fp16_all.engine"

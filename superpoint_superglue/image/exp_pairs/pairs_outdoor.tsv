@@ -1,0 +1,6 @@
+scenario	config	desc
+A_indoor_near	config_640x480_outdoor.yaml	室内对照 outdoor权重
+F_cbd_near	config_640x512_outdoor.yaml	CBD近邻 outdoor
+G_cbd_far	config_640x512_outdoor.yaml	CBD远 outdoor
+H_sacre_outdoor	config_640x480_outdoor.yaml	Sacre outdoor
+I_campus	config_640x512_outdoor.yaml	校园 outdoor

@@ -1,0 +1,16 @@
+yolo:
+  image_width: 640
+  image_height: 640
+  num_classes: 80
+  conf_threshold: 0.25
+  nms_threshold: 0.45
+  fp16: true
+  int8: true
+  calib_dir: "/home/hhl/workspace/deploy/tensorrt/YOLO-TensorRT/calib/coco"
+  calib_cache: "yolov8n_int8.calib"
+  input_tensor_names:
+    - "images"
+  output_tensor_names:
+    - "output0"
+  onnx_file: "yolov8n.onnx"
+  engine_file: "yolov8n_int8.engine"

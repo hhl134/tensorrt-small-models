@@ -1,0 +1,11 @@
+scenario	config	desc
+A_indoor_near_320	config_320x240_sk50.yaml	同室内近邻降到320x240
+A_indoor_near	config_640x480_sk50.yaml	Freiburg室内相邻帧
+B_indoor_step	config_640x480_sk50.yaml	Freiburg室内中等运动
+C_indoor_far	config_640x480_sk50.yaml	Freiburg室内大视差
+D_recon_near	config_640x1108_sk50.yaml	自采走廊近邻 640x1108
+E_recon_mid	config_640x1108_sk50.yaml	自采走廊中等基线
+F_cbd_near	config_640x512_sk50.yaml	CBD外立面近邻 640x512
+G_cbd_far	config_640x512_sk50.yaml	CBD外立面大视角
+H_sacre_outdoor	config_640x480_sk50.yaml	SacreCoeur户外宽基线
+I_campus	config_640x512_sk50.yaml	校园场景

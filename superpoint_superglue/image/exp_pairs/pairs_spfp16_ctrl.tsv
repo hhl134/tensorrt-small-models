@@ -1,0 +1,7 @@
+scenario	config	desc
+A_indoor_near_320	config_320x240.yaml	320 fp16
+A_indoor_near	config_640x480.yaml	640 fp16
+B_indoor_step	config_640x480.yaml	step fp16
+D_recon_near	config_640x1108.yaml	recon fp16
+F_cbd_near	config_640x512.yaml	cbd fp16
+H_sacre_outdoor	config_640x480.yaml	sacre fp16
